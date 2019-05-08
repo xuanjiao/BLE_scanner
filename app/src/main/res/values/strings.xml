@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BLE_scanner</string>
+    
+    <string name="label_device_name">Device name: </string>
+    
+    <string name="label_address">MAC Address: </string>
+
+    <string name="label_rssi">RSSI: </string>
 </resources>

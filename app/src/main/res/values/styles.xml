@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <dimen name="margin_list_item_horizontal">30dp</dimen>
+    
+    <dimen name="margin_list_item_vertical">16dp</dimen>
 </resources>
