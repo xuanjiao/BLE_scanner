@@ -49,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        insertDummyDevice();
+
+
+    }
+
+    private void insertDummyDevice(){
 
     }
 

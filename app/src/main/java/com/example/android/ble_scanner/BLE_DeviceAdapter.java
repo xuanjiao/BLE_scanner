@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 
-public class BLE_Device_Adapter extends CursorAdapter {
+public class BLE_DeviceAdapter extends CursorAdapter {
 
-    public BLE_Device_Adapter(Context context, Cursor c) {
+    public BLE_DeviceAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
