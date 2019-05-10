@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name=".data.DeviceProvider"
+            android:authorities="com.example.android.ble_scanner"
+            android:exported="false"/>
     </application>
 
 </manifest>
