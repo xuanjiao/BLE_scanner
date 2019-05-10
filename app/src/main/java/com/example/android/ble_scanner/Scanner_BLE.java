@@ -70,9 +70,14 @@ public class Scanner_BLE {
             mBluetoothAdapter.startLeScan(leScanCallback);
             Utils.showToast(ma.getApplicationContext(),"Start scan BLE devices");
         }
-        mScanning = false;
-        mBluetoothAdapter.stopLeScan(leScanCallback);
-        Utils.showToast(ma.getApplicationContext(),"Stop");
+
+        if(!enable){
+            mScanning = false;
+            mBluetoothAdapter.stopLeScan(leScanCallback);
+            Utils.showToast(ma.getApplicationContext(),"Stop scan BLE devices");
+        }
+
+
     }
 
     public boolean isScanning() {
@@ -88,7 +93,6 @@ public class Scanner_BLE {
                 @Override
                 public void run() {
                     if(new_rssi > signalStrength){
-                        Utils.showToast(ma.getApplicationContext(),"find a device");
                         ma.addDevice(device,new_rssi);
                     }
 

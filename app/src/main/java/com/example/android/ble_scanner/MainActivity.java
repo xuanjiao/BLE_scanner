@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         mDeviceHashMap = new HashMap<String,BLE_Device>();
-        mScanner = new Scanner_BLE(this,7500,-75);
+        mScanner = new Scanner_BLE(this,30000,-75);
 
         mDeviceTextView = findViewById(R.id.device_text_view);
         mScanButton = findViewById(R.id.scan_button);
@@ -64,12 +64,15 @@ public class MainActivity extends AppCompatActivity {
             // This device is already on the list, update its rssi value
             newDevice.setRssi(new_rssi);
             mDeviceHashMap.put(address,newDevice);
-        }
-        String info = "Name: "+ newDevice.getName() +
-                "\nAddress: "+ newDevice.getAddress() +
-                "\nRSSI: " + newDevice.getRssi() + "\n-----------------\n";
 
-        mDeviceTextView.append(info);
+            String info = "Name: "+ newDevice.getName() +
+                    "\nAddress: "+ newDevice.getAddress() +
+                    "\nRSSI: " + newDevice.getRssi() + "\n-----------------\n";
+
+            mDeviceTextView.append(info);
+            Utils.showToast(this,"find a device");
+        }
+
 
     }
 
