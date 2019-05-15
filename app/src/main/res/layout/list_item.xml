@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/margin_list_item_vertical"
+        android:layout_marginBottom="@dimen/margin_list_item_vertical"
         android:layout_marginLeft="@dimen/margin_list_item_horizontal">
 
         <LinearLayout

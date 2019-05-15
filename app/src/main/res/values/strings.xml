@@ -6,4 +6,6 @@
     <string name="label_address">MAC Address: </string>
 
     <string name="label_rssi">RSSI: </string>
+
+    <string name="menu_new_device">insert a dummy device</string>
 </resources>
