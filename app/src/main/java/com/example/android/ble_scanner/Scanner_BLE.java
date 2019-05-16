@@ -93,7 +93,7 @@ public class Scanner_BLE {
                 @Override
                 public void run() {
                     if(new_rssi > signalStrength){
-                        ma.addDevice(device,new_rssi);
+                       ma.addDevice(device,new_rssi);
                     }
 
                 }

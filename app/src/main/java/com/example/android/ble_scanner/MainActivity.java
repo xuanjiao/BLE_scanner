@@ -1,6 +1,7 @@
 package com.example.android.ble_scanner;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private ListView listView;
 
+    private HashMap<String,BLE_Device> mDeviceHashMap;
     private BLE_DeviceAdapter mDeviceAdapter;
 
     private ListView mDeviceListView;
@@ -56,12 +58,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mDeviceAdapter = new BLE_DeviceAdapter(getApplicationContext(),null);
         mDeviceListView.setAdapter(mDeviceAdapter);
 
-        BLE_initialize();
         //insertDummyDevice();
         //displayDevices();
+        BLE_initialize();
     }
 
     private void BLE_initialize(){
+
+        mDeviceHashMap = new HashMap<>();
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
             Utils.showToast(getApplicationContext()," BLE not supported");
@@ -96,19 +100,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (item.getItemId()){
             case R.id.insert_dummy_device:
                 insertDummyDevice();
-                return true;
-            case R.id.clear_list:
-                deleteAllDevices();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void deleteAllDevices(){
-        // Delete All devices on the list
-        int rowDeleted = getContentResolver().delete(DeviceEntry.CONTENT_URI,null,null);
-        Utils.showToast(this,"Deleted " + rowDeleted + "devices");
     }
 
     private void insertDummyDevice(){
@@ -145,38 +139,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         BLE_Device newDevice = new BLE_Device(device,new_rssi);
 
-        // Store device properties in content value
+        // Create a content value
         ContentValues values = new ContentValues();
+        values.put(DeviceEntry.COLUMN_NAME,newDevice.getName());
+        values.put(DeviceEntry.COLUMN_ADDRESS,newDevice.getAddress());
+        values.put(DeviceEntry.COLUMN_RSSI,newDevice.getRssi());
 
-        // Make sure address is not empty
-        if(newDevice.getAddress() != null){
-            values.put(DeviceEntry.COLUMN_NAME,newDevice.getName());
-            values.put(DeviceEntry.COLUMN_ADDRESS,newDevice.getAddress());
-            values.put(DeviceEntry.COLUMN_RSSI,newDevice.getRssi());
+        String address = device.getAddress();
+        if(!mDeviceHashMap.containsKey(address)){
+            // This device is not on the list, add it to the list
+
+            // Insert the content value to table
+            Uri newUri = getContentResolver().insert(DeviceEntry.CONTENT_URI,values);
+
+            mDeviceHashMap.put(address,newDevice);
+        }else{
+            // This device is already on the list, update its rssi value
+            newDevice.setRssi(new_rssi);
+            mDeviceHashMap.put(address,newDevice);
+
+            String selection = DeviceEntry.COLUMN_ADDRESS + "=?";
+            String selectionArgs[] = { address };
+
+            // Update device with specific address
+            int rowUpdated = getContentResolver().update(DeviceEntry.CONTENT_URI,values,selection,selectionArgs);
         }
-
-        // Insert value to table
-        Uri newUri = getContentResolver().insert(DeviceEntry.CONTENT_URI,values);
-
-//        String address = device.getAddress();
-//
-//        if(!mDeviceHashMap.containsKey(address)){
-//            // This device is not on the list, add it to the list
-//            mDeviceHashMap.put(address,newDevice);
-//        }else{
-//            // This device is already on the list, update its rssi value
-//            newDevice.setRssi(new_rssi);
-//            mDeviceHashMap.put(address,newDevice);
-//
-//            String info = "Name: "+ newDevice.getName() +
-//                    "\nAddress: "+ newDevice.getAddress() +
-//                    "\nRSSI: " + newDevice.getRssi() + "\n-----------------\n";
-//
-//            mDeviceTextView.append(info);
-//            Utils.showToast(this,"find a device");
-//        }
-
-
     }
 
     public void startScan(){

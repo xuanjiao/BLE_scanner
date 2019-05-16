@@ -33,7 +33,6 @@ public class BLE_DeviceAdapter extends CursorAdapter {
          String address = cursor.getString(addressColumn);
          int rssi = cursor.getInt(rssiColumn);
 
-
          TextView nameTextView = view.findViewById(R.id.name_text_view);
          TextView addressTextView = view.findViewById(R.id.address_text_view);
          TextView rssiTextView = view.findViewById(R.id.rssi_text_view);

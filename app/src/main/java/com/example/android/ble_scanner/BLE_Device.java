@@ -7,6 +7,9 @@ public class BLE_Device {
 
     private int rssi;
 
+    // row on table
+    private long row;
+
     public BLE_Device(BluetoothDevice bluetoothDevice, int new_rssi){
         this.mBluetoothDevice = bluetoothDevice;
         this.rssi = new_rssi;
@@ -27,4 +30,11 @@ public class BLE_Device {
         return mBluetoothDevice.getAddress();
     }
 
+    public long getRow(){
+        return this.row;
+    }
+
+    public void setRow(long row){
+        this.row = row;
+    }
 }
