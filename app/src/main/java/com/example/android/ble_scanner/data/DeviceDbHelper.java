@@ -17,7 +17,7 @@ public class DeviceDbHelper extends SQLiteOpenHelper {
             "( "+
                 DeviceEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 DeviceEntry.COLUMN_NAME + " TEXT, "+
-                DeviceEntry.COLUMN_ADDRESS + " TEXT, "+
+                DeviceEntry.COLUMN_ADDRESS + " TEXT NOT NULL "+
                 DeviceEntry.COLUMN_RSSI + " INTEGER" +
             ")";
 

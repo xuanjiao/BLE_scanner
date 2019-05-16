@@ -11,4 +11,9 @@
     <dimen name="margin_list_item_horizontal">30dp</dimen>
     
     <dimen name="margin_list_item_vertical">16dp</dimen>
+
+    <style name="TextTheme">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

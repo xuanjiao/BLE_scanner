@@ -3,5 +3,7 @@
     <item
         android:id="@+id/insert_dummy_device"
         android:title="@string/menu_new_device" />
-
+    <item
+        android:id="@+id/clear_list"
+        android:title="@string/menu_clear_list"/>
 </menu>

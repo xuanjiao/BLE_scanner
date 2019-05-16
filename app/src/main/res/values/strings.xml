@@ -7,5 +7,7 @@
 
     <string name="label_rssi">RSSI: </string>
 
-    <string name="menu_new_device">insert a dummy device</string>
+    <string name="menu_new_device">Insert a dummy device</string>
+
+    <string name="menu_clear_list">Clear list</string>
 </resources>

@@ -93,8 +93,10 @@ public class DeviceProvider extends ContentProvider {
         int rowDeleted;
         switch (mUriMatcher.match(uri)){
             case DEVICES:
+                // Delete multiple rows
                 break;
             case DEVICE_ID:
+                // Delete single row
                 selection = DeviceEntry.COLUMN_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 break;

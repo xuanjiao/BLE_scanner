@@ -23,25 +23,26 @@ public class BLE_DeviceAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        // Get Column index of table
+        // Get Column index for interest device properties
         int nameColumn = cursor.getColumnIndex(DeviceContract.DeviceEntry.COLUMN_NAME);
         int addressColumn = cursor.getColumnIndex(DeviceContract.DeviceEntry.COLUMN_ADDRESS);
         int rssiColumn = cursor.getColumnIndex(DeviceContract.DeviceEntry.COLUMN_RSSI);
 
-            // Point to first line in cursor
-            if(cursor.moveToFirst()){
-                String name = cursor.getString(nameColumn);
-                String address = cursor.getString(addressColumn);
-                int rssi = cursor.getInt(rssiColumn);
+        // Get device properties from cursor
+         String name = cursor.getString(nameColumn);
+         String address = cursor.getString(addressColumn);
+         int rssi = cursor.getInt(rssiColumn);
 
-                TextView nameTextView = view.findViewById(R.id.name_text_view);
-                TextView addressTextView = view.findViewById(R.id.address_text_view);
-                TextView rssiTextView = view.findViewById(R.id.rssi_text_view);
 
-                nameTextView.setText(name);
-                addressTextView.setText(address);
-                rssiTextView.setText(String.valueOf(rssi));
-            }
+         TextView nameTextView = view.findViewById(R.id.name_text_view);
+         TextView addressTextView = view.findViewById(R.id.address_text_view);
+         TextView rssiTextView = view.findViewById(R.id.rssi_text_view);
+
+         //write properties on text view
+         nameTextView.setText(name);
+         addressTextView.setText(address);
+         rssiTextView.setText(String.valueOf(rssi));
+
 
     }
 }

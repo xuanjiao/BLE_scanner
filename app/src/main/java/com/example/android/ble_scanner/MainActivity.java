@@ -5,8 +5,17 @@ import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -17,46 +26,47 @@ import com.example.android.ble_scanner.data.DeviceDbHelper;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     // Request code
     public static final int REQUEST_ENABLE_BT = 1;
-
-    private HashMap<String,BLE_Device> mDeviceHashMap;
 
     private Scanner_BLE mScanner;
 
     private ListView listView;
 
     private BLE_DeviceAdapter mDeviceAdapter;
-//    private TextView mDeviceTextView;
+
+    private ListView mDeviceListView;
 
     private Button mScanButton;
 
     private static int count = 0;
 
-//    private DeviceDbHelper mDbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Create objects for UI
+        mDeviceListView = findViewById(R.id.list);
+
+        getSupportLoaderManager().initLoader(0,null,this);
         // Craete a cursor adapter and adapt it to list view
         mDeviceAdapter = new BLE_DeviceAdapter(getApplicationContext(),null);
-        listView = findViewById(R.id.list);
-        listView.setAdapter(mDeviceAdapter);
+        mDeviceListView.setAdapter(mDeviceAdapter);
 
-        // Create objects for UI
-//        mDeviceTextView = findViewById(R.id.device_text_view);
+        BLE_initialize();
+        //insertDummyDevice();
+        //displayDevices();
+    }
 
-//        mDbHelper = new DeviceDbHelper(this);
+    private void BLE_initialize(){
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
             Utils.showToast(getApplicationContext()," BLE not supported");
             finish();
-
         }
-        mDeviceHashMap = new HashMap<String,BLE_Device>();
 
         // Create a scanner object and give it period and minimal rssi
         mScanner = new Scanner_BLE(this,30000,-75);
@@ -72,9 +82,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        insertDummyDevice();
-        //displayDevices();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.insert_dummy_device:
+                insertDummyDevice();
+                return true;
+            case R.id.clear_list:
+                deleteAllDevices();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void deleteAllDevices(){
+        // Delete All devices on the list
+        int rowDeleted = getContentResolver().delete(DeviceEntry.CONTENT_URI,null,null);
+        Utils.showToast(this,"Deleted " + rowDeleted + "devices");
     }
 
     private void insertDummyDevice(){
@@ -82,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(DeviceEntry.COLUMN_NAME,"Device "+String.valueOf(count));
         values.put(DeviceEntry.COLUMN_ADDRESS,"12345");
         values.put(DeviceEntry.COLUMN_RSSI,"-75");
-        getContentResolver().insert(DeviceEntry.CONTENT_URI,values);
+        Uri newUri = getContentResolver().insert(DeviceEntry.CONTENT_URI,values);
         count++;
     }
 
@@ -95,38 +129,52 @@ public class MainActivity extends AppCompatActivity {
         };
         Cursor cursor = getContentResolver().query(DeviceEntry.CONTENT_URI,projection,null,null,null);
 
-        int nameColumn = cursor.getColumnIndex(DeviceEntry.COLUMN_NAME);
-        int addressColumn = cursor.getColumnIndex(DeviceEntry.COLUMN_ADDRESS);
-        int rssiColumn = cursor.getColumnIndex(DeviceEntry.COLUMN_RSSI);
-
-        if(cursor.moveToFirst()){
-            String name = cursor.getString(nameColumn);
-            String address = cursor.getString(addressColumn);
-            int rssi = cursor.getInt(rssiColumn);
-//            mDeviceTextView.append(name + " - " + address + " - "+String.valueOf(rssi));
-        }
+//        int nameColumn = cursor.getColumnIndex(DeviceEntry.COLUMN_NAME);
+//        int addressColumn = cursor.getColumnIndex(DeviceEntry.COLUMN_ADDRESS);
+//        int rssiColumn = cursor.getColumnIndex(DeviceEntry.COLUMN_RSSI);
+//
+//        if(cursor.moveToFirst()){
+//            String name = cursor.getString(nameColumn);
+//            String address = cursor.getString(addressColumn);
+//            int rssi = cursor.getInt(rssiColumn);
+//        }
+        mDeviceAdapter.swapCursor(cursor);
     }
 
     public void addDevice(BluetoothDevice device, int new_rssi){
 
         BLE_Device newDevice = new BLE_Device(device,new_rssi);
-        String address = device.getAddress();
 
-        if(!mDeviceHashMap.containsKey(address)){
-            // This device is not on the list, add it to the list
-            mDeviceHashMap.put(address,newDevice);
-        }else{
-            // This device is already on the list, update its rssi value
-            newDevice.setRssi(new_rssi);
-            mDeviceHashMap.put(address,newDevice);
+        // Store device properties in content value
+        ContentValues values = new ContentValues();
 
-            String info = "Name: "+ newDevice.getName() +
-                    "\nAddress: "+ newDevice.getAddress() +
-                    "\nRSSI: " + newDevice.getRssi() + "\n-----------------\n";
-
-//            mDeviceTextView.append(info);
-            Utils.showToast(this,"find a device");
+        // Make sure address is not empty
+        if(newDevice.getAddress() != null){
+            values.put(DeviceEntry.COLUMN_NAME,newDevice.getName());
+            values.put(DeviceEntry.COLUMN_ADDRESS,newDevice.getAddress());
+            values.put(DeviceEntry.COLUMN_RSSI,newDevice.getRssi());
         }
+
+        // Insert value to table
+        Uri newUri = getContentResolver().insert(DeviceEntry.CONTENT_URI,values);
+
+//        String address = device.getAddress();
+//
+//        if(!mDeviceHashMap.containsKey(address)){
+//            // This device is not on the list, add it to the list
+//            mDeviceHashMap.put(address,newDevice);
+//        }else{
+//            // This device is already on the list, update its rssi value
+//            newDevice.setRssi(new_rssi);
+//            mDeviceHashMap.put(address,newDevice);
+//
+//            String info = "Name: "+ newDevice.getName() +
+//                    "\nAddress: "+ newDevice.getAddress() +
+//                    "\nRSSI: " + newDevice.getRssi() + "\n-----------------\n";
+//
+//            mDeviceTextView.append(info);
+//            Utils.showToast(this,"find a device");
+//        }
 
 
     }
@@ -134,12 +182,32 @@ public class MainActivity extends AppCompatActivity {
     public void startScan(){
         // when scan button is pressed, clear text view and start scanning
         Utils.showToast(this,"Start scanning");
-//        mDeviceTextView.setText("");
-        mDeviceHashMap.clear();
         mScanner.start();
     }
     public void stopScan(){
          mScanner.stop();
         Utils.showToast(this,"Stop scanning");
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+        String projection[] = {
+                DeviceEntry.COLUMN_ID,
+                DeviceEntry.COLUMN_NAME,
+                DeviceEntry.COLUMN_ADDRESS,
+                DeviceEntry.COLUMN_RSSI
+        };
+        return new CursorLoader(this,DeviceEntry.CONTENT_URI,projection,null,null,null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        mDeviceAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        mDeviceAdapter.swapCursor(null);
     }
 }
