@@ -1,17 +1,10 @@
 package com.example.android.ble_scanner;
 
 import android.bluetooth.BluetoothDevice;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,14 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.android.ble_scanner.data.DeviceContract.DeviceEntry;
-import com.example.android.ble_scanner.data.DeviceDbHelper;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity  {
 
     // Request code
     public static final int REQUEST_ENABLE_BT = 1;
@@ -37,7 +28,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private ListView listView;
 
     private HashMap<String,BLE_Device> mDeviceHashMap;
-    private BLE_DeviceAdapter mDeviceAdapter;
+
+    //private BLE_DeviceAdapter mDeviceAdapter;
+    private DeviceBaseAdapter mDeviceAdapter;
 
     private ListView mDeviceListView;
 
@@ -53,9 +46,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Create objects for UI
         mDeviceListView = findViewById(R.id.list);
 
-        getSupportLoaderManager().initLoader(0,null,this);
+        mDeviceHashMap = new HashMap<>();
+
+       // getSupportLoaderManager().initLoader(0,null,this);
         // Craete a cursor adapter and adapt it to list view
-        mDeviceAdapter = new BLE_DeviceAdapter(getApplicationContext(),null);
+        //DeviceAdapter = new BLE_DeviceAdapter(getApplicationContext(),null);
+        mDeviceAdapter = new DeviceBaseAdapter(mDeviceHashMap,this);
         mDeviceListView.setAdapter(mDeviceAdapter);
 
         //insertDummyDevice();
@@ -64,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void BLE_initialize(){
-
-        mDeviceHashMap = new HashMap<>();
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
             Utils.showToast(getApplicationContext()," BLE not supported");
@@ -132,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //            String address = cursor.getString(addressColumn);
 //            int rssi = cursor.getInt(rssiColumn);
 //        }
-        mDeviceAdapter.swapCursor(cursor);
+        //mDeviceAdapter.swapCursor(cursor);
     }
 
     public void addDevice(BluetoothDevice device, int new_rssi){
@@ -153,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Uri newUri = getContentResolver().insert(DeviceEntry.CONTENT_URI,values);
 
             mDeviceHashMap.put(address,newDevice);
+            mDeviceAdapter.addKey(address);
         }else{
             // This device is already on the list, update its rssi value
             newDevice.setRssi(new_rssi);
@@ -164,10 +159,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // Update device with specific address
             int rowUpdated = getContentResolver().update(DeviceEntry.CONTENT_URI,values,selection,selectionArgs);
         }
+        mDeviceAdapter.notifyDataSetChanged();
     }
 
     public void startScan(){
-        // when scan button is pressed, clear text view and start scanning
+        // when scan button is pressed, clear hashmap and list view
+        mDeviceHashMap.clear();
+        //mDeviceAdapter.swapCursor(null);
+
+        // tart scanning
         Utils.showToast(this,"Start scanning");
         mScanner.start();
     }
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
          mScanner.stop();
         Utils.showToast(this,"Stop scanning");
     }
-
+/*
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
@@ -190,11 +190,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        mDeviceAdapter.swapCursor(cursor);
+        //mDeviceAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mDeviceAdapter.swapCursor(null);
     }
+    */
 }
