@@ -37,4 +37,7 @@ public class BLE_Device {
     public void setRow(long row){
         this.row = row;
     }
+
+    public void getInfo(){
+    }
 }

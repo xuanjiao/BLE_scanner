@@ -2,6 +2,7 @@ package com.example.android.ble_scanner;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -25,8 +27,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private Scanner_BLE mScanner;
 
-    private ListView listView;
-
     private HashMap<String,BLE_Device> mDeviceHashMap;
 
     //private BLE_DeviceAdapter mDeviceAdapter;
@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity  {
 
     private static int count = 0;
 
+    public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,18 @@ public class MainActivity extends AppCompatActivity  {
 
         // Create objects for UI
         mDeviceListView = findViewById(R.id.list);
+
+//
+//        mDeviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+//                intent.putExtra(EXTRAS_DEVICE_NAME,"unknown");
+//                intent.putExtra(EXTRAS_DEVICE_ADDRESS,"unknown");
+//                stopScan();
+//                startActivity(intent);
+//            }
+//        });
 
         mDeviceHashMap = new HashMap<>();
 
@@ -57,7 +72,18 @@ public class MainActivity extends AppCompatActivity  {
         //insertDummyDevice();
         //displayDevices();
         BLE_initialize();
+
+//        mDeviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                // When user click a device, jump to the detail view and pass name and address
+//                Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
+//                intent.putExtra(EXTRAS_DEVICE_NAME,)
+//                startActivity(intent);
+//            }
+//        });
     }
+
 
     private void BLE_initialize(){
 
@@ -80,6 +106,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
             }
         });
+
     }
 
     @Override
@@ -165,7 +192,6 @@ public class MainActivity extends AppCompatActivity  {
     public void startScan(){
         // when scan button is pressed, clear hashmap and list view
         mDeviceHashMap.clear();
-        //mDeviceAdapter.swapCursor(null);
 
         // tart scanning
         Utils.showToast(this,"Start scanning");
@@ -175,27 +201,5 @@ public class MainActivity extends AppCompatActivity  {
          mScanner.stop();
         Utils.showToast(this,"Stop scanning");
     }
-/*
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-        String projection[] = {
-                DeviceEntry.COLUMN_ID,
-                DeviceEntry.COLUMN_NAME,
-                DeviceEntry.COLUMN_ADDRESS,
-                DeviceEntry.COLUMN_RSSI
-        };
-        return new CursorLoader(this,DeviceEntry.CONTENT_URI,projection,null,null,null);
-    }
 
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        //mDeviceAdapter.swapCursor(cursor);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mDeviceAdapter.swapCursor(null);
-    }
-    */
 }

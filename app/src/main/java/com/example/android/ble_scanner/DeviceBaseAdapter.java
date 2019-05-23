@@ -2,6 +2,7 @@ package com.example.android.ble_scanner;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,17 @@ import com.example.android.ble_scanner.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 public class DeviceBaseAdapter extends BaseAdapter {
 
     private HashMap<String,BLE_Device> mDeviceHashmap;
 
     private ArrayList<String> mKey;
+
     private Context context;
+
+    public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     public DeviceBaseAdapter(HashMap<String, BLE_Device> mDeviceHashmap, Context context) {
         this.context = context;
@@ -65,19 +71,34 @@ public class DeviceBaseAdapter extends BaseAdapter {
 
         BLE_Device device = mDeviceHashmap.get(mKey.get(position));
 
+        final String name = device.getName();
+        final String address = device.getAddress();
+        int rssi = device.getRssi();
+
         //write properties on text view
-        if(device.getName()!=null)
-            nameTextView.setText(device.getName());
+        if(name!=null)
+            nameTextView.setText(name);
         else
             nameTextView.setText("Unknown device");
 
-
-        if(device.getAddress()!= null)
-            addressTextView.setText(device.getAddress());
+        if(address!= null)
+            addressTextView.setText(address);
         else
             addressTextView.setText("Unknown address");
 
-        rssiTextView.setText(String.valueOf(device.getRssi()));
+        rssiTextView.setText(String.valueOf(rssi));
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 // When user click a device, jump to the detail view and pass name and address
+
+                Intent intent = new Intent(context,DetailActivity.class);
+                intent.putExtra(EXTRAS_DEVICE_NAME,name);
+                intent.putExtra(EXTRAS_DEVICE_ADDRESS,address);
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
