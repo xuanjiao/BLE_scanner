@@ -45,6 +45,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         textView.setText("Name: "+ name + "\nAddress: "+ address);
 
+        // Create a GATT client for a remote address
         mGattClient = new GATTClient(this,address);
 
     }

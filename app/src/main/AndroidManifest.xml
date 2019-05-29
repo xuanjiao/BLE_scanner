@@ -30,7 +30,15 @@
             android:authorities="com.example.android.ble_scanner"
             android:exported="false" />
 
-        <activity android:name=".DetailActivity"></activity>
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/category_detail"
+            android:parentActivityName=".MainActivity">
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity"/>
+    </activity>
     </application>
 
 </manifest>

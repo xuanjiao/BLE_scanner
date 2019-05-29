@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +20,9 @@ import java.util.logging.LogRecord;
 
 public class Scanner_BLE {
 
-    private MainActivity ma;
+    private FragmentActivity ma;
+
+    private ScannerFragment sf;
 
     private DetailActivity da;
 
@@ -32,9 +36,10 @@ public class Scanner_BLE {
 
     private int signalStrength;
 
-    public Scanner_BLE(MainActivity mainActivity, long scanPeriod, int signalStrength){
+    public Scanner_BLE(ScannerFragment sf, long scanPeriod, int signalStrength){
 
-       this.ma = mainActivity;
+       this.ma = sf.getActivity();
+       this.sf = sf;
        this.scanPeriod = scanPeriod;
        this.signalStrength = signalStrength;
 
@@ -49,7 +54,7 @@ public class Scanner_BLE {
         if(!Utils.checkBluetooth(mBluetoothAdapter)){
             // Allow user enable bluetooth feature
             Utils.requestUserBluetooth(ma);
-            ma.stopScan();
+            sf.stopScan();
         }else{
             // Start scan for one period.
             scanLeDevice(true);
@@ -70,7 +75,7 @@ public class Scanner_BLE {
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(leScanCallback);
                     Utils.showToast(ma.getApplicationContext(),"Time out");
-                    ma.stopScan();
+                    sf.stopScan();
                 }
             },scanPeriod);
 
@@ -101,7 +106,7 @@ public class Scanner_BLE {
                 @Override
                 public void run() {
                     if(new_rssi > signalStrength){
-                       ma.addDevice(device,new_rssi);
+                       sf.addDevice(device,new_rssi);
                     }
 
                 }

@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.widget.Toast;
 
 public class Utils {
+
+    // Request code
+    public static final int REQUEST_ENABLE_BT = 1;
+
     public static void showToast(Context context, String message){
         Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
     }
@@ -23,6 +27,6 @@ public class Utils {
         // Ensures Bluetooth is available on the device and it is enabled. If not,
         // displays a dialog requesting user permission to enable Bluetooth.
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        activity.startActivityForResult(enableBtIntent, MainActivity.REQUEST_ENABLE_BT);
+        activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
     }
 }
