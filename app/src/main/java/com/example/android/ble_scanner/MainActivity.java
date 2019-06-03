@@ -1,5 +1,6 @@
 package com.example.android.ble_scanner;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,12 +19,13 @@ public class MainActivity extends AppCompatActivity  {
 
         CatagoryPagerAdapter catagoryAdapter = new CatagoryPagerAdapter(getSupportFragmentManager());
 
-        // Find the view pager that allow user 
+        // Get view pager and set PagerAdapter so that it can display items
         ViewPager viewPager = findViewById(R.id.main_view_pager);
         viewPager.setAdapter(catagoryAdapter);
 
-
-
+        // Get Tablayout and set up with view pager
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.sliding_tab);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
 

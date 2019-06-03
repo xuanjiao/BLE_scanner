@@ -26,7 +26,6 @@ public class ScannerFragment extends Fragment {
 
     private HashMap<String,BLE_Device> mDeviceHashMap;
 
-    //private BLE_DeviceAdapter mDeviceAdapter;
     private DeviceBaseAdapter mDeviceAdapter;
 
     private ListView mDeviceListView;
@@ -52,7 +51,7 @@ public class ScannerFragment extends Fragment {
 
         mDeviceHashMap = new HashMap<>();
 
-        // Craete a cursor adapter and adapt it to list view
+        // Create a custom adapter and adapt it to list view
         mDeviceAdapter = new DeviceBaseAdapter(mDeviceHashMap,getContext());
         mDeviceListView.setAdapter(mDeviceAdapter);
 
