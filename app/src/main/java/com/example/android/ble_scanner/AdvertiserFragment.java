@@ -62,7 +62,7 @@ public class AdvertiserFragment extends Fragment {
         return view;
     }
 
-    public void displayServesInfo(BluetoothGattServer server){
+    public void displayServersInfo(BluetoothGattServer server){
         List<BluetoothGattService> serviceList = server.getServices();
         for (BluetoothGattService service : serviceList){
             List<BluetoothGattCharacteristic> characteristicList = service.getCharacteristics();

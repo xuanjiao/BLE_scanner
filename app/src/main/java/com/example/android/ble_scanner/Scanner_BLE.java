@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.LogRecord;
 
-public class Scanner_BLE {
+public final class Scanner_BLE {
 
     private FragmentActivity ma;
 
