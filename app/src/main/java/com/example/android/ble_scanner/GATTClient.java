@@ -57,8 +57,6 @@ public class GATTClient {
                 Log.v(LOG_TAG,"Service discovery failed. Status = " + status);
                 return;
             }
-
-            
             da.displayGattServices(gatt.getServices());
         }
     };

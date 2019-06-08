@@ -2,6 +2,10 @@ package com.example.android.ble_scanner;
 
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattServer;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.List;
+import java.util.UUID;
+
+import static android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT16;
+import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY;
+import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ;
+import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE;
+import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE;
 
 
 /**
@@ -19,6 +33,7 @@ public class AdvertiserFragment extends Fragment {
 
     private Advertiser_BLE mAdvertiser;
 
+    private TextView textView;
     public AdvertiserFragment() {
         // Required empty public constructor
     }
@@ -37,26 +52,72 @@ public class AdvertiserFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mAdvertiser.ismAdvertising())
-                    startAdvertise();
-                else
-                    stopAdvertise();
+                if(!mAdvertiser.isAdvertising())
+                    mAdvertiser.startServer();
             }
         });
+
+        textView = view.findViewById(R.id.server_detail_text_view);
+
         return view;
     }
 
-    public void startAdvertise(){
-        // do sth on UI
+    public void displayServesInfo(BluetoothGattServer server){
+        List<BluetoothGattService> serviceList = server.getServices();
+        for (BluetoothGattService service : serviceList){
+            List<BluetoothGattCharacteristic> characteristicList = service.getCharacteristics();
+
+            for (BluetoothGattCharacteristic characteristic : characteristicList){
+
+                String text = composeCharacteristicInfo(characteristic);
+                textView.setText(text);
+            }
+        }
 
 
-        mAdvertiser.start();
-        Utils.showToast(getContext(),"Start advertising");
     }
 
-    public void stopAdvertise(){
-        mAdvertiser.stop();
-        Utils.showToast(getContext(),"Stop advertising");
+    private String composeCharacteristicInfo(BluetoothGattCharacteristic characteristic){
+        UUID uuid = characteristic.getUuid();
+        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(uuid);
+        StringBuilder builder = new StringBuilder();
+
+        if((characteristic.getProperties() & PROPERTY_READ)!=0){
+            builder.append("Read ");
+        }
+
+        if((characteristic.getProperties() & PROPERTY_WRITE_NO_RESPONSE)!=0){
+            builder.append("Write without response ");
+        }
+
+        if((characteristic.getProperties() & PROPERTY_NOTIFY)!=0){
+            builder.append("Notify ");
+        }
+
+        if((characteristic.getProperties() & PROPERTY_WRITE)!=0){
+            builder.append("Write ");
+        }
+
+        Integer value = characteristic.getIntValue(FORMAT_UINT16,0);
+
+        builder.append("UUID: ").append(uuid.toString()).append("\n");
+        builder.append("Properties: ");
+        builder.append("Value: ").append(String.valueOf(value));
+        builder.append("Descriptor: ").append(descriptor.toString()).append("\n");
+
+        return  builder.toString();
     }
+
+//    public void startAdvertise(){
+//        // do sth on UI
+//
+//        mAdvertiser.startServer();
+//        Utils.showToast(getContext(),"Start advertising");
+//    }
+//
+//    public void stopAdvertise(){
+//        mAdvertiser.stopAdvertise();
+//        Utils.showToast(getContext(),"Stop advertising");
+//    }
 
 }

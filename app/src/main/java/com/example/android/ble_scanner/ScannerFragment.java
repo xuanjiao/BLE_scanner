@@ -93,10 +93,9 @@ public class ScannerFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.insert_dummy_device:
-                //insertDummyDevice();
                 break;
             case R.id.clear_list:
-                getContext().getContentResolver().delete(DeviceContract.DeviceEntry.CONTENT_URI,null,null);
+                // getContext().getContentResolver().delete(DeviceContract.DeviceEntry.CONTENT_URI,null,null);
                 mDeviceHashMap.clear();
                 mDeviceAdapter.notifyDataSetChanged();
                 break;
@@ -106,31 +105,23 @@ public class ScannerFragment extends Fragment {
         return true;
     }
 
-//    private void insertDummyDevice(){
-//        ContentValues values = new ContentValues();
-//        values.put(DeviceContract.DeviceEntry.COLUMN_NAME,"Device "+String.valueOf(count));
-//        values.put(DeviceContract.DeviceEntry.COLUMN_ADDRESS,"12345");
-//        values.put(DeviceContract.DeviceEntry.COLUMN_RSSI,"-75");
-//        Uri newUri = getContext().getContentResolver().insert(DeviceContract.DeviceEntry.CONTENT_URI,values);
-//        count++;
-//    }
 
     public void addDevice(BluetoothDevice device, int new_rssi){
 
         BLE_Device newDevice = new BLE_Device(device,new_rssi);
 
-        // Create a content value
-        ContentValues values = new ContentValues();
-        values.put(DeviceContract.DeviceEntry.COLUMN_NAME,newDevice.getName());
-        values.put(DeviceContract.DeviceEntry.COLUMN_ADDRESS,newDevice.getAddress());
-        values.put(DeviceContract.DeviceEntry.COLUMN_RSSI,newDevice.getRssi());
+//        // Create a content value
+//        ContentValues values = new ContentValues();
+//        values.put(DeviceContract.DeviceEntry.COLUMN_NAME,newDevice.getName());
+//        values.put(DeviceContract.DeviceEntry.COLUMN_ADDRESS,newDevice.getAddress());
+//        values.put(DeviceContract.DeviceEntry.COLUMN_RSSI,newDevice.getRssi());
 
         String address = device.getAddress();
         if(!mDeviceHashMap.containsKey(address)){
             // This device is not on the list, add it to the list
 
             // Insert the content value to table
-            Uri newUri = getContext().getContentResolver().insert(DeviceContract.DeviceEntry.CONTENT_URI,values);
+           // Uri newUri = getContext().getContentResolver().insert(DeviceContract.DeviceEntry.CONTENT_URI,values);
 
             mDeviceHashMap.put(address,newDevice);
             mDeviceAdapter.addKey(address);
@@ -139,11 +130,11 @@ public class ScannerFragment extends Fragment {
             newDevice.setRssi(new_rssi);
             mDeviceHashMap.put(address,newDevice);
 
-            String selection = DeviceContract.DeviceEntry.COLUMN_ADDRESS + "=?";
-            String selectionArgs[] = { address };
+//            String selection = DeviceContract.DeviceEntry.COLUMN_ADDRESS + "=?";
+//            String selectionArgs[] = { address };
 
             // Update device with specific address
-            int rowUpdated = getContext().getContentResolver().update(DeviceContract.DeviceEntry.CONTENT_URI,values,selection,selectionArgs);
+          //  int rowUpdated = getContext().getContentResolver().update(DeviceContract.DeviceEntry.CONTENT_URI,values,selection,selectionArgs);
         }
         mDeviceAdapter.notifyDataSetChanged();
     }

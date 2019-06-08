@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class CatagoryPagerAdapter extends FragmentPagerAdapter {
 
-    private String [] pageTitles = new String[]{"Advertiser", "Scanner"};
+    private String [] pageTitles = new String[]{"Scanner","Advertiser"};
 
     public CatagoryPagerAdapter(FragmentManager fm) {
         super(fm);
