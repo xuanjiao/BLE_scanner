@@ -1,22 +1,13 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.scanner;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.LogRecord;
+import com.example.android.ble_scanner.Utils;
 
 public final class Scanner_BLE {
 

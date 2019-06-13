@@ -1,4 +1,4 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.advertiser;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.scanner;
 
 import android.bluetooth.BluetoothDevice;
 

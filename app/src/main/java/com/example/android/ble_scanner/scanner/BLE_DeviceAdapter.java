@@ -1,4 +1,4 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.scanner;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import com.example.android.ble_scanner.R;
 import com.example.android.ble_scanner.data.DeviceContract;
 
 public class BLE_DeviceAdapter extends CursorAdapter {

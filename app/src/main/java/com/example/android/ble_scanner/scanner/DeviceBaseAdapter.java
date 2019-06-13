@@ -1,18 +1,16 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.scanner;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.android.ble_scanner.BLE_Device;
 import com.example.android.ble_scanner.R;
+import com.example.android.ble_scanner.scanner.BLE_Device;
+import com.example.android.ble_scanner.scanner.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -3,52 +3,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdvertiserFragment">
+    tools:context=".advertiser.AdvertiserFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/padding_linear_layout"
-            android:paddingTop="@dimen/padding_linear_layout"
-            android:paddingBottom="@dimen/padding_linear_layout"
-            android:text="Local Name"
-            style="@style/MyCustomTabLayout"
-            android:background="@color/colorLabelGray"/>
+            android:layout_weight="2"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_linear_layout"
+                android:text="Local Name"
+                style="@style/MyCustomTabLayout" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/server_local_name_edit_text"
-            style="@style/MyCustomTabLayout" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/server_local_name_edit_text"
+                style="@style/MyCustomTabLayout" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Service UUID"
-            style="@style/MyCustomTabLayout"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/Service_uuid_edit_text"
-            style="@style/MyCustomTabLayout"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_linear_layout"
+                android:text="Service UUID"
+                style="@style/MyCustomTabLayout"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/service_uuid_edit_text"
+                style="@style/MyCustomTabLayout"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Characteristics"/>
-        <Button
-            android:id="@+id/start_advertising_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
-            android:text="advertise" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_linear_layout"
+                android:text="Characteristics"
+                android:id="@+id/characteristic_edit_text"
+                style="@style/MyCustomTabLayout"/>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/start_advertising_button"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="30dp"
+                android:text="advertise" />
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

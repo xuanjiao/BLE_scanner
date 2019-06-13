@@ -1,4 +1,4 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.advertiser;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -17,13 +17,9 @@ import android.content.Context;
 import android.os.ParcelUuid;
 import android.util.Log;
 
-import com.example.android.ble_scanner.BLEServerConstants;
-
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static android.bluetooth.BluetoothGatt.GATT_SUCCESS;
 import static android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE;
@@ -34,7 +30,7 @@ import static android.bluetooth.BluetoothGattDescriptor.DISABLE_NOTIFICATION_VAL
 import static android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
 import static android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ;
 import static android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY;
-import static com.example.android.ble_scanner.BLEServerConstants.*;
+import static com.example.android.ble_scanner.advertiser.BLEServerConstants.*;
 
 public class Advertiser_BLE {
 

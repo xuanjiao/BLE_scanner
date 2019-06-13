@@ -1,7 +1,5 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.scanner;
 
-import android.app.Activity;
-import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -10,7 +8,8 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.android.ble_scanner.scanner.DetailActivity;
 
 public class GATTClient {
 

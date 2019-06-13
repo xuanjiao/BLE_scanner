@@ -31,7 +31,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".DetailActivity"
+            android:name=".scanner.DetailActivity"
             android:label="@string/category_detail"
             android:parentActivityName=".MainActivity">
 

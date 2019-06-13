@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.android.ble_scanner.advertiser.AdvertiserFragment;
+import com.example.android.ble_scanner.scanner.ScannerFragment;
+
 public class CatagoryPagerAdapter extends FragmentPagerAdapter {
 
     private String [] pageTitles = new String[]{"Scanner","Advertiser"};

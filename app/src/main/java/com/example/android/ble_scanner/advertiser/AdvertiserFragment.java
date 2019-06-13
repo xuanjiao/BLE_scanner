@@ -1,20 +1,20 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.advertiser;
 
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
+
+import com.example.android.ble_scanner.R;
+import com.example.android.ble_scanner.advertiser.Advertiser_BLE;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +33,12 @@ public class AdvertiserFragment extends Fragment {
 
     private Advertiser_BLE mAdvertiser;
 
-    private TextView textView;
+    private EditText mLocalNameEditText;
+
+    private EditText mServiceUuidEditText;
+
+    private EditText mCharacteristicEditText;
+
     public AdvertiserFragment() {
         // Required empty public constructor
     }
@@ -43,6 +48,10 @@ public class AdvertiserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advertiser, container, false);
+
+        mLocalNameEditText = view.findViewById(R.id.server_local_name_edit_text);
+        mServiceUuidEditText = view.findViewById(R.id.service_uuid_edit_text);
+        mCharacteristicEditText = view.findViewById(R.id.characteristic_edit_text);
 
         // Create a advertiser object.
         mAdvertiser = new Advertiser_BLE(this);
@@ -57,12 +66,14 @@ public class AdvertiserFragment extends Fragment {
             }
         });
 
-        textView = view.findViewById(R.id.server_detail_text_view);
+
 
         return view;
     }
 
     public void displayServersInfo(BluetoothGattServer server){
+
+        // Display for first Service
         List<BluetoothGattService> serviceList = server.getServices();
         for (BluetoothGattService service : serviceList){
             List<BluetoothGattCharacteristic> characteristicList = service.getCharacteristics();

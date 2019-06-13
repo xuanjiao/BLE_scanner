@@ -1,4 +1,4 @@
-package com.example.android.ble_scanner;
+package com.example.android.ble_scanner.scanner;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -10,7 +10,8 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.util.Iterator;
+import com.example.android.ble_scanner.R;
+
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
