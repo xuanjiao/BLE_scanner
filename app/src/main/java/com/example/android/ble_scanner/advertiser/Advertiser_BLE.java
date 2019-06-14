@@ -68,6 +68,13 @@ public class Advertiser_BLE {
         startServer();
     }
 
+    public String getLocalName() {
+        return mBluetoothAdapter.getName();
+    }
+
+    public List<BluetoothGattService> getServicesList(){
+        return mBluetoothGattServer.getServices();
+    }
 
     public void startAdvertise(AdvertiseSettings settings, AdvertiseData data){
         mBluetoothLeAdvertiser.startAdvertising(settings,data,mAdvertiseCallback);
@@ -211,4 +218,5 @@ public class Advertiser_BLE {
             }
         }
         };
+
 }

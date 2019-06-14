@@ -9,8 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.android.ble_scanner.R;
-import com.example.android.ble_scanner.scanner.BLE_Device;
-import com.example.android.ble_scanner.scanner.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,7 +58,7 @@ public class DeviceBaseAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_item,parent,false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.discovered_device_list_item,parent,false);
         }
 
         TextView nameTextView = convertView.findViewById(R.id.name_text_view);

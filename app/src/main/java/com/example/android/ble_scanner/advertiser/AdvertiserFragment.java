@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.example.android.ble_scanner.R;
 import com.example.android.ble_scanner.advertiser.Advertiser_BLE;
@@ -33,12 +35,13 @@ public class AdvertiserFragment extends Fragment {
 
     private Advertiser_BLE mAdvertiser;
 
+    private ListView mSeviceListView;
+
     private EditText mLocalNameEditText;
 
-    private EditText mServiceUuidEditText;
+    private List<BluetoothGattService> serviceList;
 
-    private EditText mCharacteristicEditText;
-
+    private ServiceAdapter mServiceAdapter;
     public AdvertiserFragment() {
         // Required empty public constructor
     }
@@ -50,76 +53,27 @@ public class AdvertiserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_advertiser, container, false);
 
         mLocalNameEditText = view.findViewById(R.id.server_local_name_edit_text);
-        mServiceUuidEditText = view.findViewById(R.id.service_uuid_edit_text);
-        mCharacteristicEditText = view.findViewById(R.id.characteristic_edit_text);
+        mSeviceListView = view.findViewById(R.id.scanner_service_list);
 
         // Create a advertiser object.
         mAdvertiser = new Advertiser_BLE(this);
+        String localName = mAdvertiser.getLocalName();
+        mLocalNameEditText.setText(localName);
 
-        // When user click advertise button start advertising. When click again, stop advertising
-        Button button = view.findViewById(R.id.start_advertising_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!mAdvertiser.isAdvertising())
-                    mAdvertiser.startServer();
-            }
-        });
-
-
-
+        // Display for first Service
+        serviceList = mAdvertiser.getServicesList();
+        mServiceAdapter = new ServiceAdapter(getContext(),serviceList);
+        mSeviceListView.setAdapter(mServiceAdapter);
         return view;
     }
 
     public void displayServersInfo(BluetoothGattServer server){
 
-        // Display for first Service
-        List<BluetoothGattService> serviceList = server.getServices();
-        for (BluetoothGattService service : serviceList){
-            List<BluetoothGattCharacteristic> characteristicList = service.getCharacteristics();
-
-            for (BluetoothGattCharacteristic characteristic : characteristicList){
-
-                String text = composeCharacteristicInfo(characteristic);
-                textView.setText(text);
-            }
-        }
 
 
     }
 
-    private String composeCharacteristicInfo(BluetoothGattCharacteristic characteristic){
-        UUID uuid = characteristic.getUuid();
-        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(uuid);
-        StringBuilder builder = new StringBuilder();
-
-        if((characteristic.getProperties() & PROPERTY_READ)!=0){
-            builder.append("Read ");
-        }
-
-        if((characteristic.getProperties() & PROPERTY_WRITE_NO_RESPONSE)!=0){
-            builder.append("Write without response ");
-        }
-
-        if((characteristic.getProperties() & PROPERTY_NOTIFY)!=0){
-            builder.append("Notify ");
-        }
-
-        if((characteristic.getProperties() & PROPERTY_WRITE)!=0){
-            builder.append("Write ");
-        }
-
-        Integer value = characteristic.getIntValue(FORMAT_UINT16,0);
-
-        builder.append("UUID: ").append(uuid.toString()).append("\n");
-        builder.append("Properties: ");
-        builder.append("Value: ").append(String.valueOf(value));
-        builder.append("Descriptor: ").append(descriptor.toString()).append("\n");
-
-        return  builder.toString();
-    }
-
-//    public void startAdvertise(){
+    //    public void startAdvertise(){
 //        // do sth on UI
 //
 //        mAdvertiser.startServer();

@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_linear_layout">
 
-</android.support.constraint.ConstraintLayout>
+  +
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLabelGray"
+                android:text="Service UUID"
+                style="@style/MyCustomTabLayout"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/service_uuid_edit_text"
+                style="@style/MyCustomTabLayout"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Characteristics"
+                style="@style/MyCustomTabLayout"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/characteristic_edit_text"
+                style="@style/MyCustomTabLayout"/>
+
+
+
+    </LinearLayout>
