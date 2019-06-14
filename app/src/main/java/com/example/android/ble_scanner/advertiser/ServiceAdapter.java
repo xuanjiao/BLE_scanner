@@ -39,15 +39,7 @@ public class ServiceAdapter extends ArrayAdapter<BluetoothGattService> {
         if(convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.service_list_item,parent,false);
 
-        // When user click advertise button start advertising. When click again, stop advertising
-//        Button button = view.findViewById(R.id.start_advertising_button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!mAdvertiser.isAdvertising())
-//                    mAdvertiser.startServer();
-//            }
-//        });
+
 //
         EditText uuidEditText = convertView.findViewById(R.id.service_uuid_edit_text);
         EditText characteristicEditText = convertView.findViewById(R.id.characteristic_edit_text);

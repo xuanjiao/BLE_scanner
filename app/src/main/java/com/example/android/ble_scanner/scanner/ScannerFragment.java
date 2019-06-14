@@ -41,7 +41,7 @@ public class ScannerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scanner, container, false);
 
-        // Allow user use option menu
+        // Allow user use option scanner_menu
         setHasOptionsMenu(true);
 
         // Create objects for UI
@@ -83,7 +83,7 @@ public class ScannerFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.scanner_menu,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
