@@ -1,9 +1,6 @@
 package com.example.android.ble_scanner.advertiser;
 
 
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattService;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,24 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toolbar;
 
 import com.example.android.ble_scanner.R;
 import com.example.android.ble_scanner.Utils;
-import com.example.android.ble_scanner.advertiser.Advertiser_BLE;
 
 import java.util.List;
-import java.util.UUID;
-
-import static android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT16;
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY;
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ;
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE;
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE;
 
 
 /**
@@ -76,14 +62,16 @@ public class AdvertiserFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.advertise_menu_item:
-                startAdvertise();
+                advertiseMenuItemSelected();
+                item.setTitle("STOP");
                 break;
                 default:
+                    return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
-    private void startAdvertise(){
+    private void advertiseMenuItemSelected(){
         // Create a advertiser object.
         mAdvertiser = new Advertiser_BLE(this);
         String localName = mAdvertiser.getLocalName();
@@ -95,16 +83,13 @@ public class AdvertiserFragment extends Fragment {
         mSeviceListView.setAdapter(mServiceAdapter);
 
         //  When user click advertise button start advertising. When click again, stop advertising
-        if(!mAdvertiser.isAdvertising())
+        if(!mAdvertiser.isAdvertising()){
+            Utils.showToast(getContext(),"Start advertising");
             mAdvertiser.startServer();
-        else
+        } else{
+            Utils.showToast(getContext(),"Stop advertising");
             mAdvertiser.stopAdvertise();
-        Utils.showToast(getContext(),"Start advertising");
+        }
     }
-
-//    public void stopAdvertise(){
-//        mAdvertiser.stopAdvertise();
-//        Utils.showToast(getContext(),"Stop advertising");
-//    }
 
 }
