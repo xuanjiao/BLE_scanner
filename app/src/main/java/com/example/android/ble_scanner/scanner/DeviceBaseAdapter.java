@@ -45,6 +45,10 @@ public class DeviceBaseAdapter extends BaseAdapter {
             mKey.add(address);
         }
     }
+
+    public void removeAllKeys(){
+        mKey.clear();
+    }
     @Override
     public Object getItem(int position) {
         return mDeviceHashmap.get(mKey.get(position));

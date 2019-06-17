@@ -47,13 +47,33 @@ public final class Scanner_BLE {
             Utils.requestUserBluetooth(ma);
             sf.stopScan();
         }else{
-            // Start scan for one period.
-            scanLeDevice(true);
+
+            if(!mScanning){
+                // Start scan for one period.
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mScanning == true){
+                            // Stop scanning after a given scan period
+                            mScanning = false;
+                            mBluetoothAdapter.stopLeScan(leScanCallback);
+                            Utils.showToast(ma.getApplicationContext(),"Time out");
+                            sf.stopScan();
+                        }
+
+                    }
+                },scanPeriod);
+
+                mScanning = true;
+                mBluetoothAdapter.startLeScan(leScanCallback);
+            }
+
         }
     }
 
     public void stop(){
-        scanLeDevice(false);
+        mScanning = false;
+        mBluetoothAdapter.stopLeScan(leScanCallback);
     }
 
     public void scanLeDevice(boolean enable){

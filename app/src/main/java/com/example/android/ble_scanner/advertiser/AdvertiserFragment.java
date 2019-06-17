@@ -81,7 +81,6 @@ public class AdvertiserFragment extends Fragment {
                     stopAdvertise();
                     item.setTitle(R.string.advertise);
                 }
-
                 break;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -109,27 +108,6 @@ public class AdvertiserFragment extends Fragment {
         // Clear all service information
         serviceList.clear();
         mServiceAdapter.notifyDataSetChanged();
-    }
-    private void advertiseMenuItemSelected(){
-
-        mLocalNameLabelTextView.setText("Local Name");
-        String localName = mAdvertiser.getLocalName();
-        mLocalNameEditText.setText(localName);
-
-        //  When user click advertise button start advertising. When click again, stop advertising
-        if(!mAdvertiser.isAdvertising()){
-            Utils.showToast(getContext(),"Start advertising");
-            mAdvertiser.startServer();
-
-            // Display services
-            serviceList = mAdvertiser.getServicesList();
-            mServiceAdapter = new ServiceAdapter(getContext(),serviceList);
-            mSeviceListView.setAdapter(mServiceAdapter);
-
-        } else{
-            Utils.showToast(getContext(),"Stop advertising");
-            mAdvertiser.stopAdvertise();
-        }
     }
 
 }

@@ -28,7 +28,7 @@ public class ScannerFragment extends Fragment {
 
     private ListView mDeviceListView;
 
-    private Button mScanButton;
+    private MenuItem  mScanMenuItem;
 
     private static int count = 0;
 
@@ -53,43 +53,36 @@ public class ScannerFragment extends Fragment {
         mDeviceAdapter = new DeviceBaseAdapter(mDeviceHashMap,getContext());
         mDeviceListView.setAdapter(mDeviceAdapter);
 
-        mScanButton = view.findViewById(R.id.scan_button);
-
         BLE_initialize();
+
         return view;
     }
 
     private void BLE_initialize(){
-
         if (!getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
             Utils.showToast(getContext().getApplicationContext()," BLE not supported");
         }
-
         // Create a scanner object and give it period and minimal rssi
         mScanner = new Scanner_BLE(this,30000,-75);
-
-        mScanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!mScanner.isScanning()){
-                    startScan();
-                }else{
-                    stopScan();
-                }
-            }
-        });
-
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.scanner_menu,menu);
+        mScanMenuItem = menu.findItem(R.id.scan_menu_item_scan);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.scan_menu_item_scan:
+                if(!mScanner.isScanning()){
+                    startScan();
+                }else{
+                    stopScan();
+                }
+                break;
             case R.id.scan_menu_item_clear_list:
                 // getContext().getContentResolver().delete(DeviceContract.DeviceEntry.CONTENT_URI,null,null);
                 mDeviceHashMap.clear();
@@ -136,15 +129,20 @@ public class ScannerFragment extends Fragment {
     }
 
     public void startScan(){
-        // when scan button is pressed, clear hashmap and list view
+        // when scan button is pressed, clear all remote devices
         mDeviceHashMap.clear();
+        mDeviceAdapter.notifyDataSetChanged();
+        mDeviceAdapter.removeAllKeys();
 
-        // tart scanning
-        Utils.showToast(getContext(),"Start scanning");
+        // Start scanning
+        Utils.showToast(getContext(),"Start scaning");
         mScanner.start();
+
+        mScanMenuItem.setTitle(R.string.stop);
     }
     public void stopScan(){
         mScanner.stop();
+        mScanMenuItem.setTitle(R.string.scan);
         Utils.showToast(getContext(),"Stop scanning");
     }
 
