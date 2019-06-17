@@ -90,9 +90,7 @@ public class ScannerFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.insert_dummy_device:
-                break;
-            case R.id.clear_list:
+            case R.id.scan_menu_item_clear_list:
                 // getContext().getContentResolver().delete(DeviceContract.DeviceEntry.CONTENT_URI,null,null);
                 mDeviceHashMap.clear();
                 mDeviceAdapter.notifyDataSetChanged();

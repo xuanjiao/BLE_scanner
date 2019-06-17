@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.ble_scanner.R;
 import com.example.android.ble_scanner.Utils;
@@ -30,6 +31,8 @@ public class AdvertiserFragment extends Fragment {
 
     private EditText mLocalNameEditText;
 
+    private TextView mLocalNameLabelTextView;
+
     private List<BluetoothGattService> serviceList;
 
     private ServiceAdapter mServiceAdapter;
@@ -47,7 +50,15 @@ public class AdvertiserFragment extends Fragment {
         setHasOptionsMenu(true);
 
         mLocalNameEditText = view.findViewById(R.id.server_local_name_edit_text);
+        mLocalNameLabelTextView = view.findViewById(R.id.server_local_name_label_text_view);
         mSeviceListView = view.findViewById(R.id.scanner_service_list);
+
+        // Create a advertiser object.
+        mAdvertiser = new Advertiser_BLE(this);
+        serviceList = mAdvertiser.getServicesList();
+
+        mServiceAdapter = new ServiceAdapter(getContext(),serviceList);
+        mSeviceListView.setAdapter(mServiceAdapter);
 
         return view;
     }
@@ -61,9 +72,16 @@ public class AdvertiserFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.advertise_menu_item:
-                advertiseMenuItemSelected();
-                item.setTitle("STOP");
+            case R.id.advertiser_menu_item_advertise:
+                if(!mAdvertiser.isAdvertising()){
+                    serviceList.clear();
+                    startAdvertise();
+                    item.setTitle(R.string.stop);
+                }else{
+                    stopAdvertise();
+                    item.setTitle(R.string.advertise);
+                }
+
                 break;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -71,21 +89,43 @@ public class AdvertiserFragment extends Fragment {
         return true;
     }
 
-    private void advertiseMenuItemSelected(){
-        // Create a advertiser object.
-        mAdvertiser = new Advertiser_BLE(this);
+    private void startAdvertise(){
+
+        // Display local device name
+        mLocalNameLabelTextView.setText("Local Name");
         String localName = mAdvertiser.getLocalName();
         mLocalNameEditText.setText(localName);
+        mAdvertiser.startServer();
 
-        // Display for first Service
-        serviceList = mAdvertiser.getServicesList();
-        mServiceAdapter = new ServiceAdapter(getContext(),serviceList);
-        mSeviceListView.setAdapter(mServiceAdapter);
+        // Refresh service list
+        mServiceAdapter.notifyDataSetChanged();
+        Utils.showToast(getContext(),"Start advertising");
+    }
+
+    private void stopAdvertise(){
+        Utils.showToast(getContext(),"Stop advertising");
+        mAdvertiser.stopAdvertise();
+
+        // Clear all service information
+        serviceList.clear();
+        mServiceAdapter.notifyDataSetChanged();
+    }
+    private void advertiseMenuItemSelected(){
+
+        mLocalNameLabelTextView.setText("Local Name");
+        String localName = mAdvertiser.getLocalName();
+        mLocalNameEditText.setText(localName);
 
         //  When user click advertise button start advertising. When click again, stop advertising
         if(!mAdvertiser.isAdvertising()){
             Utils.showToast(getContext(),"Start advertising");
             mAdvertiser.startServer();
+
+            // Display services
+            serviceList = mAdvertiser.getServicesList();
+            mServiceAdapter = new ServiceAdapter(getContext(),serviceList);
+            mSeviceListView.setAdapter(mServiceAdapter);
+
         } else{
             Utils.showToast(getContext(),"Stop advertising");
             mAdvertiser.stopAdvertise();

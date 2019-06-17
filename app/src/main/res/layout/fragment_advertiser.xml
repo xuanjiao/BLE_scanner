@@ -14,8 +14,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Local Name"
             android:background="@color/colorLabelGray"
+            android:id="@+id/server_local_name_label_text_view"
             style="@style/MyCustomTabLayout" />
 
         <EditText

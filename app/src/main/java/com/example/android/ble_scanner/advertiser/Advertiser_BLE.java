@@ -64,8 +64,6 @@ public class Advertiser_BLE {
         mBluetoothLeAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
 
         mAdvertising = false;
-
-        startServer();
     }
 
     public String getLocalName() {
