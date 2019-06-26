@@ -40,6 +40,9 @@ public final class Scanner_BLE {
         mHandler = new Handler();
     }
 
+    public boolean checkBluetooth(){
+        return Utils.checkBluetooth(mBluetoothAdapter);
+    }
 
     public void start(){
         if(!Utils.checkBluetooth(mBluetoothAdapter)){

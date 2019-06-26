@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.ble_scanner.R;
 import com.example.android.ble_scanner.Utils;
@@ -19,6 +20,11 @@ import com.example.android.ble_scanner.Utils;
 import java.util.HashMap;
 
 public class ScannerFragment extends Fragment {
+    private TextView mBLESupportTextView;
+
+    private TextView mBLEOnTextView;
+
+    private TextView mFilterextView;
 
     private Scanner_BLE mScanner;
 
@@ -45,6 +51,8 @@ public class ScannerFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // Create objects for UI
+        mBLESupportTextView = view.findViewById(R.id.ble_support_text_view);
+        mBLEOnTextView = view.findViewById(R.id.ble_on_text_view);
         mDeviceListView = view.findViewById(R.id.list);
 
         mDeviceHashMap = new HashMap<>();
@@ -60,10 +68,20 @@ public class ScannerFragment extends Fragment {
 
     private void BLE_initialize(){
         if (!getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
-            Utils.showToast(getContext().getApplicationContext()," BLE not supported");
+            mBLESupportTextView.setText("Not Supported");
+            return;
         }
         // Create a scanner object and give it period and minimal rssi
         mScanner = new Scanner_BLE(this,30000,-75);
+
+        // Show bluetooth support status
+        mBLESupportTextView.setText("Supported");
+        if(mScanner.checkBluetooth()){
+            mBLEOnTextView.setText("ON");
+        }else {
+            mBLEOnTextView.setText("OFF");
+        }
+
     }
 
     @Override
@@ -136,9 +154,11 @@ public class ScannerFragment extends Fragment {
 
         // Start scanning
         Utils.showToast(getContext(),"Start scaning");
+        mScanMenuItem.setTitle(R.string.stop);
+
         mScanner.start();
 
-        mScanMenuItem.setTitle(R.string.stop);
+
     }
     public void stopScan(){
         mScanner.stop();

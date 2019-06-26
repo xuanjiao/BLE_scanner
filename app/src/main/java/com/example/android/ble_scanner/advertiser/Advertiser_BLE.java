@@ -15,7 +15,11 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.os.ParcelUuid;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+
+import com.example.android.ble_scanner.MainActivity;
+import com.example.android.ble_scanner.Utils;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -38,6 +42,8 @@ public class Advertiser_BLE {
 
     private AdvertiserFragment af;
 
+    private FragmentActivity ma;
+
     private BluetoothAdapter mBluetoothAdapter;
 
     private BluetoothLeAdvertiser mBluetoothLeAdvertiser;
@@ -53,7 +59,7 @@ public class Advertiser_BLE {
     public Advertiser_BLE(AdvertiserFragment af){
 
         this.af = af;
-
+        this.ma = af.getActivity();
         // The BluetoothAdapter is required for any and all Bluetooth activity.
         final BluetoothManager bluetoothManager =
                 (BluetoothManager)af.getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
@@ -66,6 +72,10 @@ public class Advertiser_BLE {
         mAdvertising = false;
     }
 
+    public boolean checkBluetooth(){
+        return Utils.checkBluetooth(mBluetoothAdapter);
+    }
+
     public String getLocalName() {
         return mBluetoothAdapter.getName();
     }
@@ -75,16 +85,25 @@ public class Advertiser_BLE {
     }
 
     public void startAdvertise(AdvertiseSettings settings, AdvertiseData data){
-        mBluetoothLeAdvertiser.startAdvertising(settings,data,mAdvertiseCallback);
-        mAdvertising = true;
+
+        if(!checkBluetooth()){
+            Utils.requestUserBluetooth(ma);
+            af.stopAdvertise();
+        }else{
+            mBluetoothLeAdvertiser.startAdvertising(settings,data,mAdvertiseCallback);
+            mAdvertising = true;
+        }
+
     }
 
     public void stopAdvertise(){
-        mBluetoothLeAdvertiser.stopAdvertising(mAdvertiseCallback);
+        if(mBluetoothLeAdvertiser !=null)
+            mBluetoothLeAdvertiser.stopAdvertising(mAdvertiseCallback);
         mAdvertising = false;
     }
 
     public void startServer(){
+
         AdvertiseSettings settings = new AdvertiseSettings.Builder()
                 // Perform Bluetooth LE advertising in balanced power mode.
                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)

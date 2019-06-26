@@ -55,10 +55,15 @@ public class AdvertiserFragment extends Fragment {
 
         // Create a advertiser object.
         mAdvertiser = new Advertiser_BLE(this);
-        serviceList = mAdvertiser.getServicesList();
 
-        mServiceAdapter = new ServiceAdapter(getContext(),serviceList);
-        mSeviceListView.setAdapter(mServiceAdapter);
+        if (mAdvertiser.checkBluetooth()){
+            serviceList = mAdvertiser.getServicesList();
+
+            if(serviceList!=null){
+                mServiceAdapter = new ServiceAdapter(getContext(),serviceList);
+                mSeviceListView.setAdapter(mServiceAdapter);
+            }
+        }
 
         return view;
     }
@@ -74,7 +79,6 @@ public class AdvertiserFragment extends Fragment {
         switch (item.getItemId()){
             case R.id.advertiser_menu_item_advertise:
                 if(!mAdvertiser.isAdvertising()){
-                    serviceList.clear();
                     startAdvertise();
                     item.setTitle(R.string.stop);
                 }else{
@@ -88,7 +92,9 @@ public class AdvertiserFragment extends Fragment {
         return true;
     }
 
-    private void startAdvertise(){
+    public void startAdvertise(){
+        if (serviceList!= null)
+            serviceList.clear();
 
         // Display local device name
         mLocalNameLabelTextView.setText("Local Name");
@@ -101,7 +107,7 @@ public class AdvertiserFragment extends Fragment {
         Utils.showToast(getContext(),"Start advertising");
     }
 
-    private void stopAdvertise(){
+    public void stopAdvertise(){
         Utils.showToast(getContext(),"Stop advertising");
         mAdvertiser.stopAdvertise();
 

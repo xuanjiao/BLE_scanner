@@ -6,17 +6,75 @@
     tools:context=".scanner.ScannerFragment">
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_linear_layout"
+                android:paddingLeft="@dimen/padding_linear_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bluetooth LE:" />
+
+                <TextView
+                    android:id="@+id/ble_support_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_linear_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bluetooth:" />
+
+                <TextView
+                    android:id="@+id/ble_on_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_linear_layout"
+                android:paddingBottom="@dimen/padding_linear_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Filter:" />
+
+                <TextView
+                    android:id="@+id/filter_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+        </LinearLayout>
 
         <ListView
             android:id="@+id/list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-    </RelativeLayout>
-
+    </LinearLayout>
 
 
 </FrameLayout>
